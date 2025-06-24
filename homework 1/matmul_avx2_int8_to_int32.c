@@ -36,7 +36,7 @@ void matmul_int8_avx2_nolib(const int8_t* A, const int8_t* B, int32_t* C, int M,
                 acc0 = _mm256_add_epi32(acc0, low);
                 acc1 = _mm256_add_epi32(acc1, high);
             }
-
+ 
             // Store result in C
             int count = (j + 16 <= N) ? 16 : N - j;
             if (count >= 8) _mm256_storeu_si256((__m256i*)&C[i * N + j], acc0);

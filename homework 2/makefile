@@ -8,7 +8,13 @@ BIN_INT16 = matmul_int16
 
 # Compilador e flags
 CC = gcc
-CFLAGS = -O3 -Wall -mavx512f -mamx-int8 -mamx-int16 -mamx-tile
+CFLAGS = -O3 -Wall -mavx512f -mamx-int8 -mamx-tile #-mamx-int16 
+#CFLAGS     = -O3 -Wall \
+              -march=sapphirerapids \
+              -mno-avx512f   -mno-avx512bw  -mno-avx512cd  -mno-avx512dq \
+              -mno-avx512vl  -mno-avx512vbmi -mno-avx512vbmi2 \
+              -mno-avx512vnni -mno-avx512fp16 \
+              -mamx-tile     -mamx-int8
 
 # Compilar todos
 all: $(BIN_INT8) $(BIN_INT16)

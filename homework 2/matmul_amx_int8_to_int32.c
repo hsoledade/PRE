@@ -1,5 +1,9 @@
-#define __AMX_TILE__
-#include <immintrin.h>
+//#define __AMX_TILE__          // Força a definição dessa macro para expor as intrínsecas AMX-TILE no seu código, 
+                              // caso o header do compilador não o faça automaticamente.
+#include <immintrin.h>        // instrinsics AVX/AVX-512.
+#include <amxtileintrin.h>    // _tile_conf_t, _tile_loadconfig, _tile_release…
+#include <amxint8intrin.h>    // __tile_loadd, __tile_dpbusd, __tile_stored… // operações de multiplicação e acumulação INT8 em tiles
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,5 +1,9 @@
-#define __AMX_TILE__                 
-#include <immintrin.h>              
+//#define __AMX_TILE__        // Força a definição dessa macro para expor as intrínsecas AMX-TILE no seu código, 
+                              // caso o header do compilador não o faça automaticamente.
+#include <amxtileintrin.h>    // _tile_conf_t, _tile_loadconfig, _tile_release…
+#include <amxint8intrin.h>    // __tile_loadd, __tile_dpbusd, __tile_stored… // operações de multiplicação e acumulação INT8 em tiles
+#include <immintrin.h>        // instrinsics AVX/AVX-512.     
+
 #include <stdint.h>                 
 #include <stdio.h>                  
 #include <stdlib.h>                 
@@ -46,6 +50,7 @@ void amx_matmul_int16_to_int32(const int16_t* A, const int16_t* B, int32_t* C, i
             // Configura os tiles AMX com base nos blocos (cada tile tem seu tamanho e largura de linha)
             _tile_conf_t cfg = {0};
             cfg.palette_id = 1;                    // Paleta 1 = manualmente configuravel
+            
             cfg.startRow[0] = mb; cfg.colsb[0] = K * 2;      // Tile 0: A -> mb linhas x K colunas (2B cada) // colsb = Numero de bytes por linha
             cfg.startRow[1] = K;  cfg.colsb[1] = nb * 2;     // Tile 1: B -> K linhas x nb colunas (2B cada)
             cfg.startRow[2] = mb; cfg.colsb[2] = nb * 4;     // Tile 2: C -> mb linhas x nb colunas (4B cada)
@@ -65,9 +70,7 @@ void amx_matmul_int16_to_int32(const int16_t* A, const int16_t* B, int32_t* C, i
             for (int ii = 0; ii < mb; ii++)
                 memcpy(&C[(i0 + ii) * N + j0], &Cbuf[ii * nb], nb * sizeof(int32_t));
 
-            free(Abuf);
-            free(Bbuf);
-            free(Cbuf);
+            free(Abuf); free(Bbuf); free(Cbuf);
         }
     }
 }
