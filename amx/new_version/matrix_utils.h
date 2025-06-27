@@ -11,6 +11,24 @@
 #include "amx_matrix.h"
 #include <dirent.h>
 
+///////////////////////////////////////
+////////////      All      ////////////
+///////////////////////////////////////
+
+
+// Function to measure time
+double get_time() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec + tv.tv_usec / 1000000.0;
+}
+
+
+///////////////////////////////////////
+////////////  8uint e 8int ////////////
+///////////////////////////////////////
+
+
 // Print an unsigned 8-bit integer matrix
 void print_matrix_u8(const uint8_t* matrix, int rows, int cols /*, const char* name*/) {
     //printf("Matrix %s (%dx%d):\n", name, rows, cols);
@@ -37,19 +55,6 @@ void print_matrix_i8(const int8_t* matrix, int rows, int cols /*, const char* na
     }
 }
 
-// Print a 32-bit integer matrix
-void print_matrix_i32(const int32_t* matrix, int rows, int cols /*, const char* name*/) {
-    //printf("Matrix %s (%dx%d):\n", name, rows, cols);
-    for (int i = 0; i < rows; i++) {
-        printf("  [");
-        for (int j = 0; j < cols; j++) {
-            printf("%6d", matrix[i * cols + j]);
-            if (j < cols - 1) printf(" ");
-        }
-        printf("]\n");
-    }
-}
-
 // Fill a uint8_t matrix with a pattern
 void fill_matrix_u8(uint8_t* matrix, int rows, int cols, uint8_t pattern) {
     for (int i = 0; i < rows * cols; i++) {
@@ -64,22 +69,6 @@ void fill_matrix_i8(int8_t* matrix, int rows, int cols, int8_t pattern) {
         matrix[i] = (pattern + i) % 128 - 64;  // Range -64 to 63
         //matrix[i] = 1;
     }
-}
-
-// Checks if there are any unexpected zeros in the result matrix, and prints the sum, minimum, and maximum values for inspection.
-void verify_result(const int32_t* C, int M, int N, const char* test_name) {
-    int zero_count = 0;
-    int32_t sum = 0;
-    int32_t min_val = C[0], max_val = C[0];
-    
-    for (int i = 0; i < M*N; i++) {
-        //printf("%3d ", C[i]);
-        if (C[i] == 0) zero_count++;
-        sum += C[i];
-        if (C[i] < min_val) min_val = C[i];
-        if (C[i] > max_val) max_val = C[i];
-    }
-    printf("\n  %s - Sum: %ld, Min: %d, Max: %d, Zeros: %d/%d\n", test_name, (long)sum, min_val, max_val, zero_count, M*N);
 }
 
 // Save an int8_t matrix to a .ssv or .txt file.
@@ -121,30 +110,6 @@ int save_matrix_u8_to_file(const uint8_t* matrix, int rows, int cols, const char
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             fprintf(file, "%3u", matrix[i * cols + j]);
-            if (j < cols - 1) fprintf(file, " ");
-        }
-        fprintf(file, "\n");
-    }
-
-    fclose(file);
-    return 0;
-}
-
-// Save an int32_t matrix to a .ssv or .txt file.
-int save_matrix_i32_to_file(const int32_t* matrix, int rows, int cols, const char* filename) {
-    FILE* file = fopen(filename, "w");
-    if (!file) {
-        perror("Failed to open file for writing");
-        return -1;
-    }
-
-    // Write dimensions
-    fprintf(file, "%d %d\n", rows, cols);
-
-    // Write matrix values row by row
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            fprintf(file, "%d", matrix[i * cols + j]);
             if (j < cols - 1) fprintf(file, " ");
         }
         fprintf(file, "\n");
@@ -334,13 +299,6 @@ uint8_t* load_matrix_u8_from_file(const char* filename, int* rows, int* cols) {
     return matrix;
 }
 
-// Function to measure time
-double get_time() {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec + tv.tv_usec / 1000000.0;
-}
-
 // Benchmark multiple matrix pairs from 0 to number in the folders matrices/int8/MxK and matrices/uint8/KxN
 void benchmark_uint8_int8_matmul_one_pair(int M, int K, int N) {
     int number = 10;  // Número de matrizes para testar (0 a 9)
@@ -450,220 +408,116 @@ void benchmark_uint8_int8_matmul_one_pair(int M, int K, int N) {
     }
 }
 
+///////////////////////////////////////
+////////////  16uint e 16int //////////
+///////////////////////////////////////
+
+// TO REPAIR :
+// TO REPAIR :
+// TO REPAIR :
+
 /*
-// Benchmark one matrix pair in the folders matrices/int8/MxK and matrices/uint8/KxN
-void benchmark_int8_uint8_matmul_one_pair(int M, int K, int N) {
-    char path_A[256], path_B[256];
-    int number = 9;
 
-    snprintf(path_A, sizeof(path_A), "matrices/uint8/%dx%d/matrix_%d.ssv", M, K);
-    snprintf(path_B, sizeof(path_B), "matrices/int8/%dx%d/matrix_%d.ssv", K, N);
+// Print an unsigned 16-bit integer matrix
+void print_matrix_u16(const uint16_t* matrix, int rows, int cols) {
+    //printf("Matrix %s (%dx%d):\n", name, rows, cols);
+    for (int i = 0; i < rows; i++) {
+        printf("  [");
+        for (int j = 0; j < cols; j++) {
+            printf("%3u", matrix[i * cols + j]);
+            if (j < cols - 1) printf(" ");
+        }
+        printf("]\n");
+    }
+}
 
-    int rowsA, colsA, rowsB, colsB;
-    uint8_t* A = load_matrix_u8_from_file(path_A, &rowsA, &colsA);
-    int8_t* B = load_matrix_i8_from_file(path_B, &rowsB, &colsB);
+// Print a signed 16-bit integer matrix
+void print_matrix_i16(const int16_t* matrix, int rows, int cols ) {
+    //printf("Matrix %s (%dx%d):\n", name, rows, cols);
+    for (int i = 0; i < rows; i++) {
+        printf("  [");
+        for (int j = 0; j < cols; j++) {
+            printf("%3d", matrix[i * cols + j]);
+            if (j < cols - 1) printf(" ");
+        }
+        printf("]\n");
+    }
+}
+
+// Fill a uint8_t matrix with a pattern
+void fill_matrix_u16(uint16_t* matrix, int rows, int cols, int16_t pattern) {
+    for (int i = 0; i < rows * cols; i++) {
+        matrix[i] = pattern + (i % 65535);  // Evita overflow
+    }
+}
+
+// Fill a int8_t matrix with a pattern
+void fill_matrix_i16(int16_t* matrix, int rows, int cols, int16_t pattern) {
+    for (int i = 0; i < rows * cols; i++) {
+        matrix[i] = pattern + (i % 4000);  // Evita overflow
+    }
+}
+
+*/
+
+
+///////////////////////////////////////
+////////////     32int     ////////////
+///////////////////////////////////////
+
+
+// Print a 32-bit integer matrix
+void print_matrix_i32(const int32_t* matrix, int rows, int cols /*, const char* name*/) {
+    //printf("Matrix %s (%dx%d):\n", name, rows, cols);
+    for (int i = 0; i < rows; i++) {
+        printf("  [");
+        for (int j = 0; j < cols; j++) {
+            printf("%6d", matrix[i * cols + j]);
+            if (j < cols - 1) printf(" ");
+        }
+        printf("]\n");
+    }
+}
+
+// Checks if there are any unexpected zeros in the result matrix, and prints the sum, minimum, and maximum values for inspection.
+void verify_result(const int32_t* C, int M, int N, const char* test_name) {
+    int zero_count = 0;
+    int32_t sum = 0;
+    int32_t min_val = C[0], max_val = C[0];
     
-    if (!A || !B) {
-        fprintf(stderr, "Failed to load input matrices\n");
-        if (A) free(A);
-        if (B) free(B);
-        return;
+    for (int i = 0; i < M*N; i++) {
+        //printf("%3d ", C[i]);
+        if (C[i] == 0) zero_count++;
+        sum += C[i];
+        if (C[i] < min_val) min_val = C[i];
+        if (C[i] > max_val) max_val = C[i];
     }
+    printf("\n  %s - Sum: %ld, Min: %d, Max: %d, Zeros: %d/%d\n", test_name, (long)sum, min_val, max_val, zero_count, M*N);
+}
 
-    // Verifica dimensões carregadas
-    if (rowsA != M || colsA != K || rowsB != K || colsB != N) {
-        fprintf(stderr, "Dimension mismatch!\n");
-        free(A); free(B);
-        return;
-    }
-
-    int32_t* C = calloc(M * N, sizeof(int32_t));
-    if (!C) {
-        fprintf(stderr, "Failed to allocate result matrix\n");
-        free(A); free(B);
-        return;
-    }
-
-    // Measure time
-    double start = get_time();
-    int result = amx_multiply_int8_to_int32((uint8_t*)A, (int8_t*)B, C, M, K, N);
-    double end = get_time();
-
-    if (result != 0) {
-        fprintf(stderr, "Matrix multiplication failed (code %d)\n", result);
-        free(A); free(B); free(C);
-        return;
-    }
-
-    // Cria pasta results/ se não existir
-    struct stat st = {0};
-    if (stat("results", &st) == -1) {
-        mkdir("results", 0700);
-    }
-
-    // Salva o tempo no arquivo
-    char result_path[256];
-    snprintf(result_path, sizeof(result_path), "results/times_%dx%dx%d.ssv", M, K, N);
-    FILE* file = fopen(result_path, "w");
+// Save an int32_t matrix to a .ssv or .txt file.
+int save_matrix_i32_to_file(const int32_t* matrix, int rows, int cols, const char* filename) {
+    FILE* file = fopen(filename, "w");
     if (!file) {
-        perror("Failed to write time file");
-    } else {
-        fprintf(file, "%d %d %d\n%.6f\n", M, K, N, (end - start) * 1000);
-        fclose(file);
-        printf("Time recorded in %s\n", result_path);
+        perror("Failed to open file for writing");
+        return -1;
     }
 
-    free(A); free(B); free(C);
+    // Write dimensions
+    fprintf(file, "%d %d\n", rows, cols);
+
+    // Write matrix values row by row
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            fprintf(file, "%d", matrix[i * cols + j]);
+            if (j < cols - 1) fprintf(file, " ");
+        }
+        fprintf(file, "\n");
+    }
+
+    fclose(file);
+    return 0;
 }
-
-*/
-
-/*
-// Benchmark all matrix pairs in the folders matrices/int8/MxK and matrices/uint8/KxN
-void benchmark_int8_uint8_all_pairs(int M, int K, int N) {
-    // CORREÇÃO: Verificar se as pastas estão corretas
-    // A (uint8) = M×K, B (int8) = K×N
-    char folder_A[256], folder_B[256];
-    snprintf(folder_A, sizeof(folder_A), "matrices/uint8/%dx%d", M, K);    // A: uint8_t M×K
-    snprintf(folder_B, sizeof(folder_B), "matrices/int8/%dx%d", K, N);     // B: int8_t K×N
-    
-    printf("DEBUG: Procurando pastas:\n");
-    printf("  A (uint8): %s\n", folder_A);
-    printf("  B (int8):  %s\n", folder_B);
-    
-    DIR* dir_A = opendir(folder_A);
-    DIR* dir_B = opendir(folder_B);
-    if (!dir_A || !dir_B) {
-        fprintf(stderr, "Erro: Não foi possível abrir as pastas:\n");
-        fprintf(stderr, "  %s %s\n", folder_A, dir_A ? "Yes" : "No");
-        fprintf(stderr, "  %s %s\n", folder_B, dir_B ? "Yes" : "No");
-        if (dir_A) closedir(dir_A);
-        if (dir_B) closedir(dir_B);
-        return;
-    }
-    
-    // Prepare output directory
-    struct stat st = {0};
-    if (stat("results", &st) == -1) mkdir("results", 0700);
-    char result_path[256];
-    snprintf(result_path, sizeof(result_path), "results/times_%dx%dx%d.ssv", M, K, N);
-    
-    FILE* output = fopen(result_path, "w");
-    if (!output) {
-        perror("Failed to write result file");
-        closedir(dir_A);
-        closedir(dir_B);
-        return;
-    }
-    
-    printf("Benchmarking %dx%dx%d matrices...\n", M, K, N);
-    int processed = 0;
-    int errors = 0;
-    
-    // Match files by index: matrix_0.ssv, matrix_1.ssv, ...
-    for (int idx = 0;; idx++) {
-        char file_A[300], file_B[300];
-        snprintf(file_A, sizeof(file_A), "%s/matrix_%d.ssv", folder_A, idx);
-        snprintf(file_B, sizeof(file_B), "%s/matrix_%d.ssv", folder_B, idx);
-        
-        // Try to open both files
-        FILE* testA = fopen(file_A, "r");
-        FILE* testB = fopen(file_B, "r");
-        if (!testA || !testB) {
-            if (testA) fclose(testA);
-            if (testB) fclose(testB);
-            printf("DEBUG: Parou no índice %d (arquivos não encontrados)\n", idx);
-            break; // Stop when one of the files is missing
-        }
-        fclose(testA);
-        fclose(testB);
-        
-        // CORREÇÃO: Carregar com as funções corretas
-        printf("DEBUG: Carregando matrix_%d...\n", idx);
-        
-        // Load A (uint8_t)
-        int rowsA, colsA;
-        uint8_t* A = load_matrix_u8_from_file(file_A, &rowsA, &colsA);
-        if (!A) {
-            fprintf(stderr, "Erro: Falha ao carregar A de %s\n", file_A);
-            errors++;
-            continue;
-        }
-        
-        // Load B (int8_t) 
-        int rowsB, colsB;
-        int8_t* B = load_matrix_i8_from_file(file_B, &rowsB, &colsB);
-        if (!B) {
-            fprintf(stderr, "Erro: Falha ao carregar B de %s\n", file_B);
-            free(A);
-            errors++;
-            continue;
-        }
-        
-        // VERIFICAÇÃO DETALHADA DAS DIMENSÕES
-        printf("DEBUG: A=%dx%d, B=%dx%d, esperado: A=%dx%d, B=%dx%d\n", 
-               rowsA, colsA, rowsB, colsB, M, K, K, N);
-        
-        if (rowsA != M || colsA != K || rowsB != K || colsB != N) {
-            fprintf(stderr, "ERRO matrix_%d: Dimensões incorretas!\n", idx);
-            fprintf(stderr, "  A: %dx%d (esperado %dx%d)\n", rowsA, colsA, M, K);
-            fprintf(stderr, "  B: %dx%d (esperado %dx%d)\n", rowsB, colsB, K, N);
-            free(A);
-            free(B);
-            errors++;
-            continue;
-        }
-        
-        // Verificar alguns valores para debug
-        printf("DEBUG: A[0]=%d, A[1]=%d, B[0]=%d, B[1]=%d\n", 
-               A[0], colsA > 1 ? A[1] : 0, B[0], colsB > 1 ? B[1] : 0);
-        
-        int32_t* C = calloc(M * N, sizeof(int32_t));
-        if (!C) {
-            fprintf(stderr, "Erro de memória para matrix_%d\n", idx);
-            free(A);
-            free(B);
-            break;
-        }
-        
-        double start = get_time();
-        int result = amx_multiply_int8_to_int32(A, B, C, M, K, N);  // A=uint8, B=int8, C=int32
-        double end = get_time();
-        
-        if (result == AMX_SUCCESS) {
-            double time_ms = (end - start) * 1000;
-            fprintf(output, "%.10f\n", time_ms);
-            processed++;
-            
-            // Debug do resultado
-            printf("DEBUG: C[0]=%d, C[N-1]=%d, tempo=%.3fms\n", 
-                   C[0], N > 1 ? C[N-1] : 0, time_ms);
-                   
-            if (processed % 10 == 0) {
-                printf("Processadas %d matrizes...\n", processed);
-            }
-        } else {
-            fprintf(stderr, "matrix_%d falhou (código %d)\n", idx, result);
-            errors++;
-        }
-        
-        free(A);
-        free(B);
-        free(C);
-        
-        // Parar se muitos erros
-        if (errors > 5) {
-            fprintf(stderr, "Muitos erros (%d), parando...\n", errors);
-            break;
-        }
-    }
-    
-    fclose(output);
-    closedir(dir_A);
-    closedir(dir_B);
-    printf("Finalizado: %dx%dx%d - %d sucessos, %d erros\n", M, K, N, processed, errors);
-}
-*/
 
 
 

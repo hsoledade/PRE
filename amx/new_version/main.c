@@ -64,6 +64,8 @@ int main() {
     benchmark_uint8_int8_matmul_one_pair(512,512,512);
     benchmark_uint8_int8_matmul_one_pair(1024,1024,1024);
     
+    
+
 
     /*
     benchmark_int8_uint8_all_pairs(8,8,8);
