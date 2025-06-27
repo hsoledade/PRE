@@ -4,14 +4,11 @@
 #include <time.h>
 #include <sys/time.h>
 
-// Function to measure time
-double get_time() {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec + tv.tv_usec / 1000000.0;
-}
-
 int main() {
+
+    //////////////////////////
+    // INITIALIZE INTEL AMX //
+    //////////////////////////
     
     int result = amx_init();
     if (result != AMX_SUCCESS) {
@@ -20,6 +17,70 @@ int main() {
     }
     printf("AMX initialized successfully\n\n");
     
+    
+    //////////////////////////////////////////////////////////////////
+    // GENERATE RANDOM i8 AND u8 MATRICES WITH DIFFERENT DIMENSIONS //
+    /////////////////////////////////////////////////////////////////
+
+    generate_random_i8_matrices(4,4);
+    generate_random_i8_matrices(8,8);
+    generate_random_i8_matrices(16,16);
+    generate_random_i8_matrices(32,32);
+    generate_random_i8_matrices(64,64);
+    generate_random_i8_matrices(128,128);
+    generate_random_i8_matrices(256,256);
+    generate_random_i8_matrices(512,512);
+    generate_random_i8_matrices(1024,1024);
+
+    generate_random_u8_matrices(4,4);
+    generate_random_u8_matrices(8,8);
+    generate_random_u8_matrices(16,16);
+    generate_random_u8_matrices(32,32);
+    generate_random_u8_matrices(64,64);
+    generate_random_u8_matrices(128,128);
+    generate_random_u8_matrices(256,256);
+    generate_random_u8_matrices(512,512);
+    generate_random_u8_matrices(1024,1024);
+
+    ///////////////////////////
+    // LOAD MATRIX FROM FILE // 
+    ///////////////////////////
+
+    int rows, cols;
+    int8_t* matrix = load_matrix_u8_from_file("matrices/uint8/8x8/matrix_0.ssv", &rows, &cols);
+    print_matrix_u8(matrix, rows, cols);
+
+    ///////////////////////
+    //     BENCHMARK     //
+    ///////////////////////
+
+    benchmark_uint8_int8_matmul_one_pair(4,4,4);
+    benchmark_uint8_int8_matmul_one_pair(8,8,8);
+    benchmark_uint8_int8_matmul_one_pair(16,16,16);
+    benchmark_uint8_int8_matmul_one_pair(32,32,32);
+    benchmark_uint8_int8_matmul_one_pair(64,64,64);
+    benchmark_uint8_int8_matmul_one_pair(128,128,128);
+    benchmark_uint8_int8_matmul_one_pair(256,256,256);
+    benchmark_uint8_int8_matmul_one_pair(512,512,512);
+    benchmark_uint8_int8_matmul_one_pair(1024,1024,1024);
+    
+
+    /*
+    benchmark_int8_uint8_all_pairs(8,8,8);
+    benchmark_int8_uint8_all_pairs(16,16,16);
+    benchmark_int8_uint8_all_pairs(32,32,32);
+    benchmark_int8_uint8_all_pairs(64,64,64);
+    benchmark_int8_uint8_all_pairs(128,128,128);
+    benchmark_int8_uint8_all_pairs(256,256,256);
+    benchmark_int8_uint8_all_pairs(512,512,512);
+    benchmark_int8_uint8_all_pairs(1024,1024,1024);
+    */
+
+    ///////////////////////
+    // CODE EXAMPLE TEST //
+    ///////////////////////
+
+    /*
     //int M1 = 128, K1 = 256, N1 = 64;
     int M1 = 512, K1 = 1024, N1 = 256;
     //int M1 = 16, K1 = 64, N1 = 16;
@@ -61,13 +122,13 @@ int main() {
         printf("Multiplication error (code %d)\n", result);
     }
     
-    save_matrix_i8_to_file(A1, M1, K1, "A1.ssv");
-    save_matrix_u8_to_file(B1, K1, N1, "B1.ssv");
-    save_matrix_i32_to_file(C1, M1, N1, "C1.ssv");
+    //save_matrix_i8_to_file(A1, M1, K1, "A1.ssv");
+    //save_matrix_u8_to_file(B1, K1, N1, "B1.ssv");
+    //save_matrix_i32_to_file(C1, M1, N1, "C1.ssv");
 
     free(A1); free(B1); free(C1);
     printf("\n");
-    
+    */
     
     return 0;
 }

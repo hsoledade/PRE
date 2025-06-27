@@ -164,7 +164,7 @@ int amx_multiply_small_int8_to_int32(const uint8_t* A, const int8_t* B, int32_t*
 int amx_multiply_large_int8_to_int32(const uint8_t* A, const int8_t* B, int32_t* C, int M, int K, int N) {
     if (!amx_initialized) return AMX_ERROR_NOT_INITIALIZED;
 
-    printf("DEBUG LARGE: M=%d, K=%d, N=%d\n", M, K, N);
+    //printf("DEBUG LARGE: M=%d, K=%d, N=%d\n", M, K, N);
 
     memset(C, 0, M * N * sizeof(int32_t));
 
@@ -242,43 +242,6 @@ int amx_multiply_large_int8_to_int32(const uint8_t* A, const int8_t* B, int32_t*
     }
 
     return AMX_SUCCESS;
-}
-
-// Utility function: Print matrix (for debugging)
-void amx_print_matrix_u8(const uint8_t* matrix, int rows, int cols, const char* name) {
-    printf("Matrix %s (%dx%d):\n", name, rows, cols);
-    for (int i = 0; i < rows; i++) {
-        printf("  [");
-        for (int j = 0; j < cols; j++) {
-            printf("%3d", matrix[i * cols + j]);
-            if (j < cols - 1) printf(" ");
-        }
-        printf("]\n");
-    }
-}
-
-void amx_print_matrix_i8(const int8_t* matrix, int rows, int cols, const char* name) {
-    printf("Matrix %s (%dx%d):\n", name, rows, cols);
-    for (int i = 0; i < rows; i++) {
-        printf("  [");
-        for (int j = 0; j < cols; j++) {
-            printf("%3d", matrix[i * cols + j]);
-            if (j < cols - 1) printf(" ");
-        }
-        printf("]\n");
-    }
-}
-
-void amx_print_matrix_i32(const int32_t* matrix, int rows, int cols, const char* name) {
-    printf("Matrix %s (%dx%d):\n", name, rows, cols);
-    for (int i = 0; i < rows; i++) {
-        printf("  [");
-        for (int j = 0; j < cols; j++) {
-            printf("%6d", matrix[i * cols + j]);
-            if (j < cols - 1) printf(" ");
-        }
-        printf("]\n");
-    }
 }
 
 #endif // AMX_MATRIX_H
