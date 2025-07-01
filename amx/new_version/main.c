@@ -6,7 +6,6 @@
 
 int main() {
 
-    
     //////////////////////////
     // INITIALIZE INTEL AMX //
     //////////////////////////
@@ -18,9 +17,7 @@ int main() {
     }
     printf("AMX initialized successfully\n\n");
     
-    
-    //
-    //
+    /*
     //////////////////////////////////////////////////////////////////
     // GENERATE RANDOM i8 AND u8 MATRICES WITH DIFFERENT DIMENSIONS //
     /////////////////////////////////////////////////////////////////
@@ -70,7 +67,6 @@ int main() {
     ///////////////////////
     // CODE EXAMPLE TEST //
     ///////////////////////
-
     
     //int M1 = 128, K1 = 256, N1 = 64;
     //int M1 = 512, K1 = 1024, N1 = 256;
@@ -121,20 +117,15 @@ int main() {
 
     free(A1); free(B1); free(C1);
     printf("\n");
-    //
+    */
 
     //////////////////////////////////////
     // CODE EXAMPLE TEST int16 -> 32int //
     //////////////////////////////////////  
     
-    //
-    
-    //test_k3();
-
-    //printf("\n");
-    test_int8_completo(); // Testa uint8_int8 com dimensoes variadas (pode ter k > 64)
-    test_int8_int8(); // Testa int8_int* com dimensoes menores (k < 64)
-    //test();
+    test_uint8_int8_completo(); // Testa uint8_int8 com dimensoes variadas (pode ter k > 64)
+    //debug_teste5();
+    test_int8_int8_incompleto(); // Testa int8_int* com dimensoes menores (k < 64)
     test_amx_16int(); // Testa uint16_int16 com dimensoes menores (k < 64)
 
     return 0;
