@@ -466,7 +466,7 @@ void test_uint8_int8_completo() {
     // Teste 5: Forçar uso da função large (M=20, K=100, N=5) //
     ////////////////////////////////////////////////////////////
     printf("=== TESTES DIMENSÕES GRANDES ===\n");
-    printf("Teste 5: Matriz Grande 20x100 × 100x5 (usa função large)\n");
+    printf("Teste 5: Matriz Grande 20x100 x 100x5 (usa função large)\n");
     uint8_t* A5 = malloc(20 * 100 * sizeof(uint8_t));
     int8_t* B5 = malloc(100 * 5 * sizeof(int8_t));
     int32_t* C5 = malloc(20 * 5 * sizeof(int32_t));

@@ -124,7 +124,7 @@ int main() {
     //////////////////////////////////////  
     
     test_uint8_int8_completo(); // Testa uint8_int8 com dimensoes variadas (pode ter k > 64)
-    //debug_teste5();
+    debug_teste5();
     test_int8_int8_incompleto(); // Testa int8_int* com dimensoes menores (k < 64)
     test_amx_16int(); // Testa uint16_int16 com dimensoes menores (k < 64)
 
