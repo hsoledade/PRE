@@ -369,7 +369,7 @@ void benchmark_uint8_int8_matmul_one_pair(int M, int K, int N) {
         
         // Measure time
         double start = get_time();
-        int result = amx_multiply_int8_to_int32(A, B, C, M, K, N);
+        int result = amx_multiply_uint8_int8_to_int32(A, B, C, M, K, N);
         double end = get_time();
         
         if (result != 0) {

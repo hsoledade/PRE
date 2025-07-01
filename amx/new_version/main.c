@@ -6,6 +6,7 @@
 
 int main() {
 
+    
     //////////////////////////
     // INITIALIZE INTEL AMX //
     //////////////////////////
@@ -18,6 +19,8 @@ int main() {
     printf("AMX initialized successfully\n\n");
     
     
+    //
+    //
     //////////////////////////////////////////////////////////////////
     // GENERATE RANDOM i8 AND u8 MATRICES WITH DIFFERENT DIMENSIONS //
     /////////////////////////////////////////////////////////////////
@@ -63,30 +66,16 @@ int main() {
     benchmark_uint8_int8_matmul_one_pair(256,256,256);
     benchmark_uint8_int8_matmul_one_pair(512,512,512);
     benchmark_uint8_int8_matmul_one_pair(1024,1024,1024);
-    
-    
-
-
-    /*
-    benchmark_int8_uint8_all_pairs(8,8,8);
-    benchmark_int8_uint8_all_pairs(16,16,16);
-    benchmark_int8_uint8_all_pairs(32,32,32);
-    benchmark_int8_uint8_all_pairs(64,64,64);
-    benchmark_int8_uint8_all_pairs(128,128,128);
-    benchmark_int8_uint8_all_pairs(256,256,256);
-    benchmark_int8_uint8_all_pairs(512,512,512);
-    benchmark_int8_uint8_all_pairs(1024,1024,1024);
-    */
 
     ///////////////////////
     // CODE EXAMPLE TEST //
     ///////////////////////
 
-    /*
+    
     //int M1 = 128, K1 = 256, N1 = 64;
-    int M1 = 512, K1 = 1024, N1 = 256;
+    //int M1 = 512, K1 = 1024, N1 = 256;
     //int M1 = 16, K1 = 64, N1 = 16;
-    //int M1 = 13, K1 = 24, N1 = 12;
+    int M1 = 13, K1 = 24, N1 = 12;
     
     printf("Allocating matrices... ");
     fflush(stdout);
@@ -111,7 +100,7 @@ int main() {
     fflush(stdout);
     double start = get_time();
     
-    result = amx_multiply_int8_to_int32(A1, B1, C1, M1, K1, N1);
+    result = amx_multiply_uint8_int8_to_int32(A1, B1, C1, M1, K1, N1);
     
     double end = get_time();
     printf("OK\n");
@@ -123,14 +112,30 @@ int main() {
     } else {
         printf("Multiplication error (code %d)\n", result);
     }
+
+    print_matrix_i32(C1,M1,N1);
     
-    //save_matrix_i8_to_file(A1, M1, K1, "A1.ssv");
-    //save_matrix_u8_to_file(B1, K1, N1, "B1.ssv");
-    //save_matrix_i32_to_file(C1, M1, N1, "C1.ssv");
+    save_matrix_i8_to_file(A1, M1, K1, "A1.ssv");
+    save_matrix_u8_to_file(B1, K1, N1, "B1.ssv");
+    save_matrix_i32_to_file(C1, M1, N1, "C1.ssv");
 
     free(A1); free(B1); free(C1);
     printf("\n");
-    */
+    //
+
+    //////////////////////////////////////
+    // CODE EXAMPLE TEST int16 -> 32int //
+    //////////////////////////////////////  
     
+    //
+    
+    //test_k3();
+
+    //printf("\n");
+    test_int8_completo(); // Testa uint8_int8 com dimensoes variadas (pode ter k > 64)
+    test_int8_int8(); // Testa int8_int* com dimensoes menores (k < 64)
+    //test();
+    test_amx_16int(); // Testa uint16_int16 com dimensoes menores (k < 64)
+
     return 0;
 }
